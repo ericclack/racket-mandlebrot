@@ -5,8 +5,8 @@
 ; maximum iterations
 (define tmax (make-parameter 25))
 ; canvas width and height
-(define width (make-parameter 800.0))
-(define height (make-parameter 500.0))
+(define width (make-parameter 800))
+(define height (make-parameter 500))
 
 ; real maps to x axis
 (define real-min (make-parameter -2.2))
@@ -37,11 +37,11 @@
 ; scale r and i for rendering on canvas
 (: scale-r (-> Flonum Flonum))
 (define (scale-r r)
-  (* (scale r (real-min) (real-max)) (width)))
+  (* (scale r (real-min) (real-max)) (real->double-flonum (width))))
 
 (: scale-i (-> Flonum Flonum))
 (define (scale-i i)
-  (* (scale i (imag-min) (imag-max))) (height))
+  (* (scale i (imag-min) (imag-max)) (real->double-flonum (height))))
 
 (define-type Dc<%>
   (Class [draw-line (-> Number Number Number Number Void)]))                        
@@ -55,8 +55,8 @@
 
 (: plot-set (-> (Instance Dc<%>) Void))
 (define (plot-set dc)
-  (let ([r-step (/ (- (real-max) (real-min)) (width))]
-        [i-step (/ (- (imag-max) (imag-min)) (height))])
+  (let ([r-step (/ (- (real-max) (real-min)) (real->double-flonum (width)))]
+        [i-step (/ (- (imag-max) (imag-min)) (real->double-flonum (height)))])
     (for ([r : Flonum (in-range (real-min) (real-max) r-step)])
          (display ".")
          (for ([i : Flonum (in-range (imag-min) (imag-max) i-step)])
@@ -68,7 +68,7 @@
          real-min real-max 
          imag-min imag-max 
          m-set? 
-         plot-set)
+         plot-set plot-point)
 
 
 

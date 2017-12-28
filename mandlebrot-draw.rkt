@@ -3,7 +3,7 @@
 ; Copyright Eric Clack 2017.
 
 (require racket/draw)
-(require "mandlebrot.rkt")
+(require "mandlebrot-typed.rkt")
 
 ;(real-max 0.0)
 ;(imag-max 0.0)
