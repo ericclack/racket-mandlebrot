@@ -1,4 +1,4 @@
-#lang typed/racket
+#lang racket
 
 ; Copyright Eric Clack 2017. 
 
@@ -15,10 +15,8 @@
 (define imag-min (make-parameter -1.2))
 (define imag-max (make-parameter 1.2))
 
-(: m-set? (-> Complex Boolean))
 (define (m-set? c)
   ; is c in the mandelbrot set?
-  (: iter (-> Complex Integer Boolean))
   (define (iter x t)
     (cond
       [(>= t (tmax)) #t]
@@ -27,7 +25,6 @@
                   (add1 t))]))
   (iter (make-rectangular 0 0) 0))
 
-(: scale (-> Flonum Flonum Flonum Flonum))
 (define (scale n low high)
   ; represent n as a percentage between low and high
   (/
@@ -35,31 +32,24 @@
    (- high low)))  
 
 ; scale r and i for rendering on canvas
-(: scale-r (-> Flonum Flonum))
 (define (scale-r r)
   (* (scale r (real-min) (real-max)) (real->double-flonum (width))))
 
-(: scale-i (-> Flonum Flonum))
 (define (scale-i i)
   (* (scale i (imag-min) (imag-max)) (real->double-flonum (height))))
 
-(define-type Dc<%>
-  (Class [draw-line (-> Number Number Number Number Void)]))                        
-
-(: plot-point (-> (Instance Dc<%>) Complex Void))
 (define (plot-point dc c)
   ; draw point representing this complex number
   (let ([x (scale-r (real->double-flonum (real-part c)))]
         [y (scale-i (real->double-flonum (imag-part c)))])
     (send dc draw-line x y x y)))
 
-(: plot-set (-> (Instance Dc<%>) Void))
 (define (plot-set dc)
   (let ([r-step (/ (- (real-max) (real-min)) (real->double-flonum (width)))]
         [i-step (/ (- (imag-max) (imag-min)) (real->double-flonum (height)))])
-    (for ([r : Flonum (in-range (real-min) (real-max) r-step)])
+    (for ([r (in-range (real-min) (real-max) r-step)])
          (display ".")
-         (for ([i : Flonum (in-range (imag-min) (imag-max) i-step)])
+         (for ([i (in-range (imag-min) (imag-max) i-step)])
               (let ([c (make-rectangular r i)])
                 (when (m-set? c)
                   (plot-point dc c)))))))
@@ -68,7 +58,7 @@
          real-min real-max 
          imag-min imag-max 
          m-set? 
-         plot-set plot-point)
+         plot-set)
 
 
 

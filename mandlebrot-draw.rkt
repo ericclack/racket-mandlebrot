@@ -12,7 +12,10 @@
 (define dc (send bmp make-dc))
 (send dc clear)
 
-(plot-set dc)
+(define-values (res cpu real gc)
+     (time-apply plot-set (list dc)))
+
+(printf "Rendered in ~a ms, ~a CPU ms" real cpu)
 
 (newline)
 bmp
