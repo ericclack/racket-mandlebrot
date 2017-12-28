@@ -3,7 +3,7 @@
 ; Copyright Eric Clack 2017. 
 
 ; maximum iterations
-(define tmax (make-parameter 50))
+(define tmax (make-parameter 100))
 ; canvas width and height
 (define width (make-parameter 800))
 (define height (make-parameter 500))
@@ -15,17 +15,16 @@
 (define imag-min (make-parameter -1.2))
 (define imag-max (make-parameter 1.2))
 
-(: m-set? (-> Complex Boolean))
+(: m-set? (-> Float-Complex Boolean))
 (define (m-set? c)
   ; is c in the mandelbrot set?
-  (: iter (-> Complex Integer Boolean))
-  (define (iter x t)
+  (let iter ([x : Float-Complex (make-rectangular 0.0 0.0)]
+             [t : Integer 0])
     (cond
       [(>= t (tmax)) #t]
       [(> (magnitude x) 2) #f]
       [else (iter (+ (expt x 2) c)
-                  (add1 t))]))
-  (iter (make-rectangular 0 0) 0))
+                  (add1 t))])))
 
 (: scale (-> Flonum Flonum Flonum Flonum))
 (define (scale n low high)
@@ -64,7 +63,7 @@
                 (when (m-set? c)
                   (plot-point dc c)))))))
 
-(provide width height
+(provide width height tmax
          real-min real-max 
          imag-min imag-max 
          m-set? 
