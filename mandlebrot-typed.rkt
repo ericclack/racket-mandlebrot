@@ -4,16 +4,6 @@
 
 ; maximum iterations
 (define tmax (make-parameter 100))
-; canvas width and height
-(define width (make-parameter 800))
-(define height (make-parameter 500))
-
-; real maps to x axis
-(define real-min (make-parameter -2.2))
-(define real-max (make-parameter .6))
-; imaginary to y axis
-(define imag-min (make-parameter -1.2))
-(define imag-max (make-parameter 1.2))
 
 (: m-set? (-> Float-Complex Boolean))
 (define (m-set? c)
@@ -33,41 +23,33 @@
    (- n low)
    (- high low)))  
 
-; scale r and i for rendering on canvas
-(: scale-r (-> Flonum Flonum))
-(define (scale-r r)
-  (* (scale r (real-min) (real-max)) (real->double-flonum (width))))
-
-(: scale-i (-> Flonum Flonum))
-(define (scale-i i)
-  (* (scale i (imag-min) (imag-max)) (real->double-flonum (height))))
-
 (define-type Dc<%>
   (Class [draw-line (-> Number Number Number Number Void)]))                        
 
-(: plot-point (-> (Instance Dc<%>) Complex Void))
-(define (plot-point dc c)
-  ; draw point representing this complex number
-  (let ([x (scale-r (real->double-flonum (real-part c)))]
-        [y (scale-i (real->double-flonum (imag-part c)))])
-    (send dc draw-line x y x y)))
+(: plot-set (-> (Instance Dc<%>) Real Real Flonum Flonum Flonum Flonum Void))
+(define (plot-set dc width height real-min real-max imag-min imag-max)
+  (let* ([w (real->double-flonum width)]
+         [h (real->double-flonum height)]
+         [r-step (/ (- real-max real-min) w)]
+         [i-step (/ (- imag-max imag-min) h)])
 
-(: plot-set (-> (Instance Dc<%>) Void))
-(define (plot-set dc)
-  (let ([r-step (/ (- (real-max) (real-min)) (real->double-flonum (width)))]
-        [i-step (/ (- (imag-max) (imag-min)) (real->double-flonum (height)))])
-    (for ([r : Flonum (in-range (real-min) (real-max) r-step)])
+    (: plot-point (-> (Instance Dc<%>) Float-Complex Void))
+    (define (plot-point dc c)
+      ; draw point representing this complex number
+      (let ([x (* (scale (real-part c) real-min real-max) w)]
+            [y (* (scale (imag-part c) imag-min imag-max) h)])
+        (send dc draw-line x y x y)))
+    
+    (for ([r : Flonum (in-range real-min real-max r-step)])
          (display ".")
-         (for ([i : Flonum (in-range (imag-min) (imag-max) i-step)])
+         (for ([i : Flonum (in-range imag-min imag-max i-step)])
               (let ([c (make-rectangular r i)])
                 (when (m-set? c)
                   (plot-point dc c)))))))
 
-(provide width height tmax
-         real-min real-max 
-         imag-min imag-max 
+(provide tmax
          m-set? 
-         plot-set plot-point)
+         plot-set)
 
 
 
