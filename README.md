@@ -8,19 +8,19 @@ Open up `mandlebrot-draw.rkt` and pick the version to test.
 
 All using:
 
-Canvas: 800x500
-Iterations: tmax = 100
+    Canvas: 800x500
+    Iterations: tmax = 100
 
-(define real-min -2.2)
-(define real-max .6)
-(define imag-min -1.2)
-(define imag-max 1.2)
+    (define real-min -2.2)
+    (define real-max .6)
+    (define imag-min -1.2)
+    (define imag-max 1.2)
 
 ### Typed with Flonums - 2db1e34
 
 Rendered in 9287 ms, 8926 CPU ms
 
-### Typed with Reals - 
+### Typed with Reals - d88d280
 
 Rendered in 16164 ms, 15545 CPU ms
 
