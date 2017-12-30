@@ -7,7 +7,7 @@
 
 (define (m-set? c)
   ; is c in the mandelbrot set?
-  (let iter ([x (make-rectangular 0 0)]
+  (let iter ([x (make-rectangular 0.0 0.0)]
              [t 0])
     (cond
       [(>= t (tmax)) #t]

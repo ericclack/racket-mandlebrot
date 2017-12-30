@@ -3,7 +3,10 @@
 ; Copyright Eric Clack 2017.
 
 (require racket/draw)
-(require "mandlebrot-untyped.rkt")
+
+; pick which version you want:
+;(require "mandlebrot-untyped.rkt")
+(require "mandlebrot-typed.rkt")
 
 ; canvas size
 (define width 800)
