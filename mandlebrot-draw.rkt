@@ -6,7 +6,8 @@
 
 ; pick which version you want:
 ;(require "mandlebrot-untyped.rkt")
-(require "mandlebrot-typed.rkt")
+;(require "mandlebrot-typed.rkt") ;fastest
+(require "mandlebrot-typed-real.rkt")
 
 ; canvas size
 (define width 800)
